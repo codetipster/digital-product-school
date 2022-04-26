@@ -1,180 +1,24 @@
 import './index.css'
 import  './styles.scss'
 import  './style.js'
-import img from './assets/img_avatar.png'
-import {FaTimes, FaEdit} from 'react-icons/fa'
+import {v4 as uuidv4} from 'uuid' 
+import Footer from './components/Footer'
+import Form from './components/Form'
+import Navbar from './layout/Navbar'
+import ContactStats from './components/ContactStats'
+import ContactList from './components/ContactList'
 import Contacts from './data/contacts'
 import { useState } from 'react'
 
-
-//import PropTypes from 'prop-types'
-
-const Footer = () => {
-  const footerYear = new Date().getFullYear()
-  return (
-    <div className='footer'> 
-      <p>Copyright &copy; {footerYear} Samuel Nzekwe.</p>
-    </div>
-  )
-}
-
-//button component
-const Button = (props) => {
-  return(
-    <div>
-      <button className='bubbly-button'>{props.label}</button>
-    </div>
-  )
-
-  
-}
-
-const ContactStats = ({totalContacts}) => {
-
-  if(totalContacts.length < 2 && totalContacts.length !== 0){
-    return <p className='stats'>{`You have a total of ${totalContacts.length} contacts. 
-    Networking is as powerful as power itself, why not try making new acquaintances today`}</p>
-  } else {
-  return (
-    <div className='stats'>
-      <p>{`You have a total of ${totalContacts.length} contacts`}</p>
-    </div>
-  )
-}
-}
-
-//navbar component
-const Navbar = () => {
-  return (
-    <div className="nav-container">
-
-      <div className="logo">
-        <h3>iKontact</h3>
-      </div>
-
-      <div className="links">
-        <ul>
-          <li>
-            <Button label='Home' />
-          </li>
-          <li>
-            <Button label='About' />
-          </li>
-          <li>
-            <Button label='My Contact List' />
-          </li>
-        </ul>
-      </div>
-    </div>
-  )
-}
-
-
-//contact card component
-
-const ContactCard = ({contact, handleDelete}) => {
-
-
-  return (
-    <div className="chip">
-      <div className='card-text'>
-        <img src={img} alt="Person" width="96" height="96"/>
-        <p>Name: {contact.firstname}  {contact.lastname} </p>
-        <p id= 'chiptext'>Email: {contact.email}</p>
-      </div>
-
-      <div className='btn-container'>
-      <button className='btn'><FaEdit color='#ff0081'/>Edith</button>
-        <button className='btn' onClick={() => handleDelete(contact.id)}><FaTimes color='#ff0081'/>Delete</button>
-      </div>
-     
-    </div>
-  )
-}
-
-
-const ContactList = ({contacts, handleDelete}) => {
-  if(!contacts || contacts.length <= 0){
-    return <p className='stats'>You do not have any contacts yet, Go and make friends!</p>
-  } else {
-  return (
-    <div className='form'>
-     <h4>My Contact</h4>
-      
-      <hr/>
-    <div className="contact-list">
-        {contacts.map(contact => <ContactCard key={contact.id} contact={contact} handleDelete={handleDelete}/> )}     
-    </div>
-    </div>
-  )
-}}
-
-//form component
-
-const Form = ({contacts}) => {
-const [data, setContacts] = useState(contacts)
-const [newFirstname, setNewFirstname] = useState("")
-const [newLastname, setNewLastname] = useState("")
-const [newEmail, setNewEmail] = useState("")
-
-//handles form submit 
-const addContact = (e) => {
-  e.preventDefault()
-  const newNameObject = {
-    firstname: newFirstname,
-    lastname: newLastname,
-    email: newEmail,
-    id: data.length + 1,
-  }
-  setContacts(data.concat(newNameObject))
-  console.log('improved data', data)
-  setNewFirstname("")
-  setNewLastname("")
-  setNewEmail("")
-}
-
-const handleFirstnameChange = (e) => {
-  setNewFirstname(e.target.value)
-}
-
-const handleLastnameChange = (e) => {
-  setNewLastname(e.target.value)
-}
-
-const handleEmailChange = (e) => {
-  setNewEmail(e.target.value)
-}
-
-  return (
-    <div className='form'>
-      <h4>Add New Contact</h4>
-      
-      <hr/>
-      <form onSubmit={addContact}>
-        <div>
-          
-          firstname: <input type='text' value={newFirstname} onChange={handleFirstnameChange}/>
-        </div>
-        <div>
-          lastname: <input type='text' value={newLastname} onChange={handleLastnameChange}/>
-        </div>
-        <div>
-          email: <input type='email' value={newEmail} onChange={handleEmailChange}/>
-        </div>
-        <div>
-          <button className='registerbtn' type="submit" >Add Contact</button>
-        </div>
-      </form>
-    </div>
-  )
-}
 
 //main app component 
 function App() {
   const [contacts, setContact] = useState(Contacts)
 
-  const handleClick = () => {
-    console.log('clicked')
+  const handleAddContact = (newContact) => {
+    newContact.id = uuidv4()
+    setContact([newContact, ...contacts])
+    console.log(newContact)
   }
   
   const deleteContact = (id) => {
@@ -190,7 +34,7 @@ function App() {
       <Navbar />
       <ContactStats totalContacts={contacts}/>
       <ContactList  contacts={contacts} handleDelete={deleteContact}/>
-      <Form contacts={contacts} onClick={handleClick}/>
+      <Form contacts={contacts} handleAddContact={handleAddContact}/>
       <Footer />
     </div>
   );
