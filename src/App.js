@@ -29,6 +29,20 @@ const Button = (props) => {
   
 }
 
+const ContactStats = ({totalContacts}) => {
+
+  if(totalContacts.length < 2 && totalContacts.length !== 0){
+    return <p className='stats'>{`You have a total of ${totalContacts.length} contacts. 
+    Networking is as powerful as power itself, why not try making new acquaintances today`}</p>
+  } else {
+  return (
+    <div className='stats'>
+      <p>{`You have a total of ${totalContacts.length} contacts`}</p>
+    </div>
+  )
+}
+}
+
 //navbar component
 const Navbar = () => {
   return (
@@ -58,8 +72,9 @@ const Navbar = () => {
 
 //contact card component
 
-const ContactCard = ({contact}) => {
-  
+const ContactCard = ({contact, handleDelete}) => {
+
+
   return (
     <div className="chip">
       <div className='card-text'>
@@ -70,7 +85,7 @@ const ContactCard = ({contact}) => {
 
       <div className='btn-container'>
       <button className='btn'><FaEdit color='#ff0081'/>Edith</button>
-        <button className='btn'><FaTimes color='#ff0081'/>Delete</button>
+        <button className='btn' onClick={() => handleDelete(contact.id)}><FaTimes color='#ff0081'/>Delete</button>
       </div>
      
     </div>
@@ -78,44 +93,76 @@ const ContactCard = ({contact}) => {
 }
 
 
-const ContactList = ({contacts}) => {
+const ContactList = ({contacts, handleDelete}) => {
   if(!contacts || contacts.length <= 0){
-    return <p>You do not have any contacts yet!</p>
+    return <p className='stats'>You do not have any contacts yet, Go and make friends!</p>
   } else {
   return (
     <div className="contact-list">
       <h3>My Contacts</h3>
-        {contacts.map(contact => <ContactCard key={contact.id} contact={contact} /> )}     
+        {contacts.map(contact => <ContactCard key={contact.id} contact={contact} handleDelete={handleDelete}/> )}     
     </div>
   )
 }}
 
 //form component
 
-const Form = ({contacts, onClick}) => {
+const Form = ({contacts}) => {
+const [data, setContacts] = useState(contacts)
+const [newFirstname, setNewFirstname] = useState("")
+const [newLastname, setNewLastname] = useState("")
+const [newEmail, setNewEmail] = useState("")
+
+//handles form submit 
+const addContact = (e) => {
+  e.preventDefault()
+  const newNameObject = {
+    firstname: newFirstname,
+    lastname: newLastname,
+    email: newEmail,
+    id: data.length + 1,
+  }
+  setContacts(data.concat(newNameObject))
+  console.log('improved data', data)
+  setNewFirstname("")
+  setNewLastname("")
+  setNewEmail("")
+}
+
+const handleFirstnameChange = (e) => {
+  setNewFirstname(e.target.value)
+}
+
+const handleLastnameChange = (e) => {
+  setNewLastname(e.target.value)
+}
+
+const handleEmailChange = (e) => {
+  setNewEmail(e.target.value)
+}
 
   return (
     <div>
       <h1>Add New Contact</h1>
-      <form>
+      <form onSubmit={addContact}>
         <div>
-          firstname: <input />
+          firstname: <input value={newFirstname} onChange={handleFirstnameChange}/>
         </div>
         <div>
-          lastname: <input />
+          lastname: <input value={newLastname} onChange={handleLastnameChange}/>
         </div>
         <div>
-          email: <input />
+          email: <input value={newEmail} onChange={handleEmailChange}/>
         </div>
         <div>
-          <button type="submit" onClick={onClick}>add</button>
+          <button type="submit" >Add Contact</button>
         </div>
       </form>
     </div>
   )
 }
 
-//main app component
+//main app component 
 function App() {
   const [contacts, setContact] = useState(Contacts)
 
@@ -123,11 +170,19 @@ function App() {
     console.log('clicked')
   }
   
+  const deleteContact = (id) => {
+    if (window.confirm("Are you sure that you would like to DELETE this contact from your contact list?")){
+      setContact(contacts.filter((contact) => contact.id !== id))
+    }
+    
+  }
+
+
   return (
     <div className="container">
       <Navbar />
-      
-      <ContactList  contacts={contacts}/>
+      <ContactStats totalContacts={contacts}/>
+      <ContactList  contacts={contacts} handleDelete={deleteContact}/>
       <Form contacts={contacts} onClick={handleClick}/>
       <Footer />
     </div>

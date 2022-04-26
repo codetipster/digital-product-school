@@ -79,6 +79,15 @@ button {
     
   }
 
+  .stats {
+      margin-top: 4px;
+      
+      text-align: center;
+      padding-bottom: 4px;
+      margin-bottom: 8px;
+
+  }
+
   .card-text {
       width: 60%;
       
