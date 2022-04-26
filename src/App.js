@@ -49,7 +49,7 @@ const Navbar = () => {
     <div className="nav-container">
 
       <div className="logo">
-        <h1>iKontact</h1>
+        <h3>iKontact</h3>
       </div>
 
       <div className="links">
@@ -98,9 +98,13 @@ const ContactList = ({contacts, handleDelete}) => {
     return <p className='stats'>You do not have any contacts yet, Go and make friends!</p>
   } else {
   return (
+    <div className='form'>
+     <h4>My Contact</h4>
+      
+      <hr/>
     <div className="contact-list">
-      <h3>My Contacts</h3>
         {contacts.map(contact => <ContactCard key={contact.id} contact={contact} handleDelete={handleDelete}/> )}     
+    </div>
     </div>
   )
 }}
@@ -142,20 +146,23 @@ const handleEmailChange = (e) => {
 }
 
   return (
-    <div>
-      <h1>Add New Contact</h1>
+    <div className='form'>
+      <h4>Add New Contact</h4>
+      
+      <hr/>
       <form onSubmit={addContact}>
         <div>
-          firstname: <input value={newFirstname} onChange={handleFirstnameChange}/>
+          
+          firstname: <input type='text' value={newFirstname} onChange={handleFirstnameChange}/>
         </div>
         <div>
-          lastname: <input value={newLastname} onChange={handleLastnameChange}/>
+          lastname: <input type='text' value={newLastname} onChange={handleLastnameChange}/>
         </div>
         <div>
-          email: <input value={newEmail} onChange={handleEmailChange}/>
+          email: <input type='email' value={newEmail} onChange={handleEmailChange}/>
         </div>
         <div>
-          <button type="submit" >Add Contact</button>
+          <button className='registerbtn' type="submit" >Add Contact</button>
         </div>
       </form>
     </div>
