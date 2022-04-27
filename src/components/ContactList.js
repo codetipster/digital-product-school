@@ -1,4 +1,5 @@
 import ContactCard from "./ContactCard"
+import ContactStats from "./ContactStats"
 
 const ContactList = ({contacts, handleDelete}) => {
     if(!contacts || contacts.length <= 0){
@@ -7,7 +8,7 @@ const ContactList = ({contacts, handleDelete}) => {
     return (
       <div className='form'>
        <h4>My Contact</h4>
-        
+       <ContactStats totalContacts={contacts}/>
         <hr/>
       <div className="contact-list">
         

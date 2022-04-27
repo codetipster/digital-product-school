@@ -4,10 +4,12 @@ import  './style.js'
 import {v4 as uuidv4} from 'uuid' 
 import Footer from './components/Footer'
 import Form from './components/Form'
+import About from './pages/About'
 import Navbar from './layout/Navbar'
-import ContactStats from './components/ContactStats'
 import ContactList from './components/ContactList'
 import Contacts from './data/contacts'
+import Home from './pages/Home'
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import { useState } from 'react'
 
 
@@ -30,13 +32,18 @@ function App() {
 
 
   return (
+    <Router>
     <div className="container">
       <Navbar />
-      <ContactStats totalContacts={contacts}/>
-      <ContactList  contacts={contacts} handleDelete={deleteContact}/>
-      <Form contacts={contacts} handleAddContact={handleAddContact}/>
+      <Routes>
+         <Route path='/' element={<Home />}/>
+         <Route path='/about' element={<About />}/>
+         <Route path='/add' element={<Form contacts={contacts} handleAddContact={handleAddContact}/>}/>
+         <Route path='/mycontact' element={<ContactList  contacts={contacts} handleDelete={deleteContact}/>}/>
+      </Routes>
       <Footer />
     </div>
+    </Router>
   );
 }
 
