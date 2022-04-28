@@ -1,12 +1,12 @@
 //form component
 import { useState } from "react"
-
+import { useNavigate} from "react-router-dom"
 const Form = ({handleAddContact}) => {
 
     const [newFirstname, setNewFirstname] = useState("")
     const [newLastname, setNewLastname] = useState("")
     const [newEmail, setNewEmail] = useState("")
-    
+    const navigate = useNavigate()
     //handles form submit 
     const addContact = (e) => {
       e.preventDefault()
@@ -15,12 +15,15 @@ const Form = ({handleAddContact}) => {
         lastname: newLastname,
         email: newEmail,
       }
-    
-      handleAddContact(newNameObject)
       
-      setNewFirstname("")
-      setNewLastname("")
-      setNewEmail("")
+      
+      handleAddContact(newNameObject)
+      if(window.confirm("New Contact Added Successfully!")){
+        setNewFirstname("")
+        setNewLastname("")
+        setNewEmail("")
+        handleClick()
+      }
     }
     
     const handleFirstnameChange = (e) => {
@@ -34,13 +37,17 @@ const Form = ({handleAddContact}) => {
     const handleEmailChange = (e) => {
       setNewEmail(e.target.value)
     }
+
+    const handleClick = () => {
+      navigate('/mycontact')
+    }
     
       return (
         <div className='form'>
           <h4>Add New Contact</h4>
           
           <hr/>
-          <form onSubmit={addContact}>
+          <form onSubmit={addContact} >
             <div>
               
               firstname: <input type='text' value={newFirstname} onChange={handleFirstnameChange}/>
@@ -53,6 +60,7 @@ const Form = ({handleAddContact}) => {
             </div>
             <div>
               <button className='registerbtn' type="submit" >Add Contact</button>
+              
             </div>
           </form>
         </div>

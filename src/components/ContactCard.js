@@ -1,7 +1,7 @@
 //contact card component
 import img from '../assets/img_avatar.png'
 
-import {FaTimes, FaEdit} from 'react-icons/fa'
+import {FaTimes} from 'react-icons/fa'
 
 const ContactCard = ({contact, handleDelete}) => {
 
@@ -15,7 +15,7 @@ const ContactCard = ({contact, handleDelete}) => {
         </div>
   
         <div className='btn-container'>
-        <button className='btn'><FaEdit color='#ff0081'/>Edith</button>
+        
           <button className='btn' onClick={() => handleDelete(contact.id)}><FaTimes color='#ff0081'/>Delete</button>
         </div>
        

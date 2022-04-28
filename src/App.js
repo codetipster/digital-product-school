@@ -16,6 +16,7 @@ import { useState } from 'react'
 //main app component 
 function App() {
   const [contacts, setContact] = useState(Contacts)
+  
 
   const handleAddContact = (newContact) => {
     newContact.id = uuidv4()
@@ -31,6 +32,7 @@ function App() {
   }
 
 
+
   return (
     <Router>
     <div className="container">
@@ -39,7 +41,7 @@ function App() {
          <Route path='/' element={<Home />}/>
          <Route path='/about' element={<About />}/>
          <Route path='/add' element={<Form contacts={contacts} handleAddContact={handleAddContact}/>}/>
-         <Route path='/mycontact' element={<ContactList  contacts={contacts} handleDelete={deleteContact}/>}/>
+         <Route path='/mycontact' element={<ContactList  contacts={contacts} handleDelete={deleteContact} />}/>
       </Routes>
       <Footer />
     </div>
