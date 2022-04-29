@@ -1,31 +1,56 @@
 import './index.css'
 import  './styles.scss'
 import  './style.js'
-import {v4 as uuidv4} from 'uuid' 
+//import {v4 as uuidv4} from 'uuid' 
 import Footer from './components/Footer'
 import Form from './components/Form'
 import About from './pages/About'
 import Navbar from './layout/Navbar'
 import ContactList from './components/ContactList'
-import Contacts from './data/contacts'
+//import Contacts from './data/contacts'
 import Home from './pages/Home'
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 
 //main app component 
 function App() {
-  const [contacts, setContact] = useState(Contacts)
+  const [contacts, setContact] = useState([])
   
+  useEffect(() => {
+    fetchContact()
+  }, [])
+    
+ //fetching backend data
+ const fetchContact = async () => {
+   const response = await fetch(`/contact?_sort=id&_order=desc`)
+   const data = await response.json()
 
-  const handleAddContact = (newContact) => {
-    newContact.id = uuidv4()
-    setContact([newContact, ...contacts])
-    console.log(newContact)
+   setContact(data)
+ }   
+ 
+ //making request to server(backend)
+  const handleAddContact = async (newContact) => {
+    const response = await fetch(`/contact?_sort=id&_order=desc`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newContact)
+    })
+
+    const data = await response.json()
+
+    //newContact.id = uuidv4()
+    setContact([data, ...contacts])  
+    //console.log(newContact)
   }
   
-  const deleteContact = (id) => {
+
+  //Deleting from server
+  const deleteContact = async (id) => {
     if (window.confirm("Are you sure that you would like to DELETE this contact from your contact list?")){
+      await fetch(`contact/${id}`, { method: 'DELETE'})
       setContact(contacts.filter((contact) => contact.id !== id))
     }
     
